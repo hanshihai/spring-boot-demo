@@ -1,9 +1,6 @@
 package com.hans.boot.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hans.boot.demo.mongodata.FeatureDao;
-import com.hans.boot.demo.mode.Sample;
-import com.hans.boot.demo.mongodata.FeatureDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,26 +14,17 @@ import java.util.List;
 @EnableAutoConfiguration
 public class MainResource {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    FeatureDaoService bean;
 
     @RequestMapping("/sample")
-    public Sample main(@RequestParam("text") String text) {
+    public String main(@RequestParam("text") String text) {
         try {
+            System.out.println("Here is the input parameter :" + text);
             String result = Util.load("sample.json");
-            Sample sample = objectMapper.readValue(result, Sample.class);
-            return sample;
+            return result;
         }catch(Exception e) {
             throw new RuntimeException("Failed to handle request /sample", e);
         }
     }
 
-    @RequestMapping("/mongo")
-    public List<FeatureDao> mongo() {
-        return bean.getAllFeatureDao();
-    }
 }
 
