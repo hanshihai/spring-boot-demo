@@ -3,11 +3,18 @@ package com.hans.boot.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 @RestController
@@ -26,25 +33,31 @@ public class MainResource {
         }
     }
 
-    @RequestMapping(value="/mediaEntries/tests", method = RequestMethod.POST,
+    @GetMapping("/sample/get")
+    public ResponseEntity<List<Long>> getParameters(@RequestParam("ids") Long[] ids) {
+        List<Long> result = new ArrayList<>();
+        Arrays.stream(ids).forEach(id -> result.add(id));
+        return ResponseEntity.ok(result);
+    }
+
+    @RequestMapping(value="/sample/postparam", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<List<Long>> checkParameters(@RequestParam("entryIds") Long[] entryIds) {
+    public ResponseEntity<List<Long>> postParameters(@RequestParam("entryIds") Long[] entryIds) {
         List<Long> result = new ArrayList<>();
         Arrays.stream(entryIds).forEach(id -> result.add(id));
         return ResponseEntity.ok(result);
     }
 
-    @RequestMapping(value="/mediaEntries/tests", method = RequestMethod.POST,
+    @RequestMapping(value="/mediaEntries/postjson", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Long>> checkParameters(@RequestBody Long[] entryIds) {
+    public ResponseEntity<List<Long>> postJson(@RequestBody Long[] entryIds) {
         List<Long> result = new ArrayList<>();
         Arrays.stream(entryIds).forEach(id -> result.add(id));
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/mediaEntries/zipfiles")
+    @GetMapping("/sample/zipfiles")
     public StreamingResponseBody downloadZipFiles(HttpServletResponse response) throws FileNotFoundException {
-        logger.info("got here: downloadFiles for entry ");
 
         /*MediaEntry mediaEntry = mediaEntriesRepository.findOne(entryId);
 
