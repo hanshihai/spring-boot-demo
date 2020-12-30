@@ -21,3 +21,7 @@ Add the mock server and client test cases:
 * mock client
 
 1. run MockClientTest as junit test.
+
+* swagger ui
+1. the api-docs : http://localhost:9090/v3/api-docs
+2. the swagger ui : http://localhost:9090/swagger-ui.html

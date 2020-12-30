@@ -21,9 +21,8 @@ import java.util.zip.ZipOutputStream;
 @EnableAutoConfiguration
 public class MainResource {
 
-
     @RequestMapping("/sample")
-    public String main(@RequestParam("text") String text) {
+    public String main(@RequestParam(name="text", required = false) String text) {
         try {
             System.out.println("Here is the input parameter :" + text);
             String result = Util.load("sample.json");
